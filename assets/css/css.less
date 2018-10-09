@@ -1,0 +1,238 @@
+@import "../../node_modules/bootstrap/less/variables.less";
+
+
+@import "../../node_modules/bootstrap/less/bootstrap.less";
+@import "../../node_modules/bootstrap/less/mixins.less";
+
+// Reset
+@import "../../node_modules/bootstrap/less/normalize.less";
+@import "../../node_modules/bootstrap/less/print.less";
+
+// Core CSS
+@import "../../node_modules/bootstrap/less/navs.less";
+//@import "../../node_modules/bootstrap/less/header.less";
+//@import "../../node_modules/bootstrap/less/footer.less";
+@import "../../node_modules/bootstrap/less/scaffolding.less";
+@import "../../node_modules/bootstrap/less/type.less";
+@import "../../node_modules/bootstrap/less/code.less";
+//@import "../../node_modules/x-editable/dist/bootstrap-editable/bootstrap-editable.css";
+
+
+@font-headers: "JF-Flat";
+@font-sans: "Al-Jazeera-Arabic";
+
+@import (inline)"fonts/@{font-headers}.css";
+@import (inline)"fonts/@{font-sans}.css";
+/***
+* This is my custom arabic css
+*/
+
+body {
+    font-family: @font-sans, serif;
+}
+.brand, nav {
+    font-family: @font-headers, serif;
+}
+
+a.utf8cell {
+    position: absolute;
+    top: 0.1em;
+    right: 0.1em;
+    font-size: 8pt;
+    color: black;
+    font-family: monospace;
+}
+.nav>li>a{
+    padding: 10px 10px;
+}
+a.anal{
+    text-decoration: none;
+    cursor: pointer;
+    display: table-row;
+    word-break: break-word;
+}
+span.error{
+    font-size: xx-small;
+}
+a.morph:focus {
+outline: 0;
+}
+.isstem{
+    font-weight: bold;
+}
+
+a.morph.even {
+    color: #5397C9;
+}
+td.SW, th.SW{
+    width: 5em;
+}
+span.tag{
+    display: inline-block;
+    width: 100px;
+    border: 1px black solid;
+}
+a.morph.odd {
+    color: #7C8A94;
+}
+
+a.anal.even {
+    color: #9DBF54;
+}
+a.anal.odd {
+    color: #F26D3D;
+}
+a.theword.even {
+    color: blue;
+}
+body.screening {
+
+    .incorrect span.similiarity{
+        display: none;
+    }
+
+    a.morph{
+        text-decoration: none;
+        cursor: pointer;
+        display: block;
+        font-size: 8pt;
+        border-bottom: 1px dotted #555;
+    }
+    a.theMin::before {
+        content: "\2588\00a0";
+        font-size: 6pt;
+        color: #aaa;
+    }
+    a.anal.incorrect::before {
+        content: "\2612";
+        color: red;
+        font-size: 12pt;
+    }
+    a.anal.correct::before {
+        content: "\2611";
+        color: green;
+        font-size: 12pt;
+    }
+    a.morph.incorrect{
+        text-decoration: line-through;
+    }
+    a.highlight{
+        background-color: #eeeeee;
+        border: 1px dashed gray;
+        word-wrap: normal;
+    }
+    span.sawalaha {
+        direction: ltr;
+        border: 1px dotted black;
+        display: inline-block;
+        font-size: 9pt;
+    }
+    a.notchosed {
+        opacity: .2;
+    }
+    a.theword.odd {
+        color: red;
+    }
+    a.theMin {
+        color: green;
+        font-weight: bold;
+    }
+    .ui-tooltip {
+        min-width: 40%;
+    }
+    .popover-content, .ui-tooltip-content {
+        font-size: 9pt;
+        font-family: monospace;
+        white-space: pre-wrap;
+    }
+    table td, table th {
+        border: 1px solid gray;
+        word-wrap: break-word;
+        position: relative;
+    }
+    table tr:first-child th {
+        border-top: 0;
+    }
+    table tr:last-child td {
+        border-bottom: 0;
+    }
+    table tr td:first-child, table tr th:first-child {
+        border-left: 0;
+    }
+    table tr td:last-child, table tr th:last-child {
+        border-right: 0;
+    }
+    .analyses .tooltip-inner{
+        white-space: pre;
+        text-align: left;
+    }
+    .num::after{
+        content: " (" attr(sim) ")"
+    }
+
+}
+
+a.morph{
+    display: block;
+    font-size: 8pt;
+}
+a.indel{
+    background-color:rgba(255,0,0,0.3);
+}
+
+table td {
+    max-width: 182pt;
+    }
+td.orig {
+    word-wrap: break-word;
+    font-size: .8em;
+}
+table {
+    border-collapse: collapse;
+}
+#status{
+    background-color: rgb(240,240,240);
+    color: blue;
+}
+
+.similarityTable{
+    display: none;
+}
+
+
+//////////////////////
+body.printing {
+    // .navbar,
+    .inputText, .nav-tabs{
+        display:none;
+    }
+    a.morph.incorrect{
+        display:none;
+    }
+    a.morph::after{
+        content: ",";
+    }
+    // td::after{
+    //     content:"&emsp;";
+    // }
+    // td:last-child::after{
+    //     content:"";
+    // }
+    td:last-child a.morph::after{
+        content: "";
+    }
+    .utf8Word{
+        font-size: 8pt;
+        display: block;
+    }
+
+    span.similiarity{
+        display: none;
+    }
+    span.similiarityScore{
+        display: none;
+    }
+    // .num{
+    //     display: none;
+    // }
+}

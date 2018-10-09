@@ -1,0 +1,143 @@
+<div>
+    <div ng-if="showHelp" class="alert alert-warning" role="alert">
+        <span class="label label-danger">D: delete</span>
+        <span class="label label-success">Q: Prepend</span>
+        <span class="label label-success">A: Append</span>
+        <span class="label label-warning">U: Undo</span>
+        <span class="label label-primary">Arrow: Move between Cells</span>
+        <span class="label label-primary">Shift + Up/Down: Prev/Next File</span>
+        <span class="label label-primary">Shift + Left/Right: Prev/Next Tab</span>
+        <span class="label label-info">Space: Tooltip</span>
+        <span class="label label-danger">X: Mark Incorrecr</span>
+        <span class="label label-info">W: Popover</span>
+        <span class="label label-info">Enter: Popover</span>
+        <span class="label label-info">S: Force Compute Similarty</span>
+        <span class="label label-info">N: Needleman-Wunsch Align Current Tagger with SW</span>
+        <span class="label label-info">M: Needleman-Wunsch Align All Taggers with SW</span>
+        <span class="label label-warning">Click+Alt: Check Solution as Correct</span>
+    </div>
+    <ul class="nav nav-tabs" id="feature">
+        <li ng-repeat="(t,page) in ::pages" role="presentation" ng-class="{active: $parent.task == t}">
+            <a href="#!/analyse/{{::t}}/{{::sorah}}/{{::ayah}}">{{::page}}</a>
+        </li>
+    </ul>
+    <a ng-show="task=='morphemes'" ng-click="align()" type="button" class="btn btn-default">Align</a>
+    <table id="results" class="table">
+        <thead>
+            <tr>
+                <th class="num" sim="{{overallSimilarityScore.sum/overallSimilarityScore.counter | number: 2}}">num</th>
+                <th>word</th>
+                <th class="{{::s}}" ng-repeat="s in ::tableHeads" ><span tooltip title="{{::tools.keys[s]}}">{{::s}}</span></th>
+                <th ng-if="is_prediction">Pred</th>
+            </tr>
+        </thead>
+        <tbody ng-repeat="data in datas track by $index">
+
+            <tr ng-repeat="word in data track by $index">
+                <td class="num" ng-click='$log.log(word)' sim="{{word.sim.sum/word.sim.counter | number: 2}}">{{::word.num}}</td>
+                <td><span ng-repeat="syllabse in ::word.word track by $index" class='utf8Word theword {{::$index++ % 2 ? 'even' : 'odd'}}'>
+                    {{::syllabse}}
+                    </span>
+                </td>
+                <td ng-repeat="aword in word.tools track by aword.tid"
+                    ng-click='$log.log(aword)'
+                    id="{{::aword.ayahId}}-{{::aword.wid}}-{{::aword.tid}}"
+                    >
+                    <a class="utf8cell">{{aword.mutf8}}</a>
+                    <span ng-show="aword.error" class="error error{{::aword.errCode}}">ERR: {{::aword.errMsg}}</span>
+                    <span ng-hide="aword.error" ng-switch on="whattask" class='{{::aword.ayahId}}-{{::aword.tid}} analyses'>
+                    <a ng-switch-default
+                    ng-repeat="(aid,analysis) in aword.data track by aid"
+                    role='button' tabindex='{{::aword.aid}}'
+                    id='{{::aword.ayahId}}-{{::aword.wid}}-{{::aword.tid}}-{{::analysis.aid}}'
+                    ng2222-show="analysis.theMin"
+                    ng-class='[
+                    "{{::aword.ayahId}}-{{::aword.wid}}-{{::aword.tid}}-{{::analysis.aid}}",
+                    "{{::aword.tid}}",
+                    "anal",
+                    {odd: $index % 2 == 1,
+                    even: $index % 2 == 0,
+                    notchosed: aword.choice && !analysis.choice,
+                    correct: analysis.iscorrect == 2,
+                    incorrect:analysis.iscorrect == 1,
+                    theMin: analysis.theMin
+                    }]
+                    '
+                    ng-click="onAnalysisClick(analysis,aword,$event)"
+                    popover data-content="{{::analysis.obj | json }}">{{::analysis.value}}</a>
+
+
+                    <a ng-switch-when="disambig"
+                    ng-repeat="(aid,analysis) in aword.data track by aid"
+                    role='button' tabindex='{{::aword.aid}}'
+                    id='{{::aword.ayahId}}-{{::aword.wid}}-{{::aword.tid}}-{{::analysis.aid}}'
+                    ng-show="analysis.theMin"
+                    ng-class='[
+                    "{{::aword.ayahId}}-{{::aword.wid}}-{{::aword.tid}}-{{::analysis.aid}}",
+                    "{{::aword.tid}}",
+                    "anal",
+                    {odd: $index % 2 == 1,
+                    even: $index % 2 == 0,
+                    notchosed: aword.choice && !analysis.choice,
+                    correct: analysis.iscorrect == 2,
+                    incorrect:analysis.iscorrect == 1,
+                    theMin222: analysis.theMin
+                    }]
+                    '
+                    ng-click="onAnalysisClick(analysis,aword,$event,sorah)"
+                    popover data-content="{{::analysis.obj | json }}">{{::analysis.value}}<br><span class="sawalaha">{{::analysis.sawalaha}}/{{::analysis.glossorlem}}</span></a>
+
+                    <a ng-switch-when="morphemes"
+                    ng-repeat="morpheme in aword.data"
+                    role='button' tabindex='{{::morpheme.aid}}'
+                    ng-class='[{highlight: selectedCell.wid == "{{::aword.wid}}" && tableHeads[selectedCell.tid] == "{{::aword.tid}}" && selectedCell.aid == "{{::morpheme.aid}}" ,
+                    incorrect: aword.iscorrect == 1,
+                    odd: $index % 2 == 1,
+                    indel: morpheme.value=="-----",
+                    isstem: morpheme.obj.type=="stem",
+                    even: $index % 2 == 0},"morph","{{::aword.tid}}"]'
+                    popover data-content="{{::aword.obj.morphemes | json }}"
+                    tooltip title="{{ ::trans[aword.tid][morpheme.value] || 'No Definition Found'}} "
+                    ng-click='selectMorpheme(aword.wid,aword.tid,morpheme.aid);$log.log(morpheme.sim)'
+                    ><span ng-hide="aword.tid=='SW'" class="similiarity " style="color: {{getColor(1-morpheme.sim)}}">▐</span>{{::morpheme.value}}</a>
+
+
+                    <a ng-switch-when="feature"
+                    ng-repeat="morpheme in aword.data"
+                    role='button' tabindex='{{::morpheme.aid}}'
+                    ng-class='[{highlight: selectedCell.wid == "{{::aword.wid}}" && tableHeads[selectedCell.tid] == "{{::aword.tid}}" && selectedCell.aid == "{{::morpheme.aid}}" ,
+                    incorrect: aword.iscorrect == 1,
+                    odd: $index % 2 == 1,
+                    indel: morpheme.value=="-----",
+                    even: $index % 2 == 0},"morph","{{::aword.tid}}"]'
+                    popover data-content="{{::aword.obj | json }}"
+                    tooltip title="{{ ::trans[aword.tid][morpheme.value] || 'No Definition Found'}} "
+                    ng-click='selectMorpheme(aword.wid,aword.tid,morpheme.aid);$log.log(morpheme.sim)'
+                    ><span ng-hide="aword.tid=='SW'" class="similiarity " style="color: {{getColor(1-morpheme.sim)}}">▐</span>{{::morpheme.value}}</a>
+
+                    <a ng-switch-when="orig" role='button' tabindex='{{::aword.aid}}' class='{{::$index% 2 ? "even" : "odd"}} morph' tooltip title='{{::aword.value}}'>Hover Here</a>
+                    </span>
+                </td>
+
+                <td ng-if="word.predictions">
+                <a ng-repeat="aword in word.predictions"
+                role='button' 
+                ng-class='[{odd: $index % 2 == 1,
+                    indel: morpheme.value=="-----",
+                    even: $index % 2 == 0},"morph","{{::aword.tid}}"]'
+                tooltip title="{{aword.attr}}" 
+                >{{aword.val}}</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="similarityTable">
+        <div class="fixed" id="newA"></div>
+        <div class="fixed" id="newB"></div>
+        <div class="fixed" id="summary"></div>
+        <h3>Matrix</h3>
+        <table id="mat" cellspacing="10" border="0">
+            <tr><td>...</td></tr>
+        </table>
+    </div>
+</div>

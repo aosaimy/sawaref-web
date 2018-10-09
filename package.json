@@ -1,0 +1,40 @@
+{
+  "name": "sawaref-web",
+  "version": "0.1.5",
+  "description": "Exploratory tool of different tools",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-copy": "^0.7.0",
+    "grunt-contrib-less": "^1.0.0",
+    "grunt-contrib-uglify": "^0.7.0",
+    "grunt-contrib-watch": "^0.6.1",
+    "grunt-copy": "^0.1.0"
+  },
+  "dependencies": {
+    "angular": "^1.6.8",
+    "angular-filter": "^0.5.17",
+    "angular-resource": "^1.6.8",
+    "angular-route": "^1.6.8",
+    "async": "^2.6.0",
+    "bootstrap": "3",
+    "bootstrap-3-typeahead": "^4.0.2",
+    "buckwalter-transliteration": "github:aosaimy/buckwalter-transliteration",
+    "express": "^4.16.2",
+    "express-session": "^1.15.6",
+    "filterable": "^2.0.1",
+    "fontawesome": "^4.7.2",
+    "grunt-express-server": "^0.5.3",
+    "jquery": "^3.3.1",
+    "node-localstorage": "^1.3.0",
+    "node-uuid": "^1.4.8",
+    "sawaref-converters": "aosaimy/sawaref-converters",
+    "x-editable": "^1.5.1",
+    "xml2js": "^0.4.19"
+  }
+}

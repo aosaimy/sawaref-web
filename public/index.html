@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="sawaref" ng-controller="MainController as mc">
+    <head>
+        <title>SAWAREF {{sorahNav.sorah}}:{{sorahNav.ayah}} {{sorahNav.task}}</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="assets/css/css.css" />
+        <script src="assets/js/js.js"></script>
+    </head>
+    <body role="document" class="screening">
+        <nav class="navbar navbar-inverse">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="/">SAWAREF</a>
+                </div>
+                <div id="navbar" class="collapse navbar-collapse">
+                    <form id="sorahnameform" class="navbar-form navbar-left" role="search" onsubmit="return false;">
+                        <input class="form-control" id="sorahNo" placeholder="Sorah Name/Number" autocomplete="off"/>
+                        <!-- <button type="button" id="showAll" class="btn btn-default">All</button> -->
+                    </form>
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a ng-href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+                            <span id="ayahDisplay">{{sorahNav.ayah}}</span>
+                            <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu" role="menu" id="ayahNo">
+                                <li ng-repeat="i in sorahNav.ayaCount | range" ng-class='{active: i+1 == sorahNav.ayah}'><a href='#/analyse/{{sorahNav.task}}/{{sorahNav.sorah}}/{{::i+1}}/{{sorahNav.alignp}}/{{sorahNav.toolsp}}'>{{::i+1}}</option>
+                            </ul>
+                        </li>
+                    </ul>
+                    <a ng-click="downloadAllResult()" download="result.json" type="button" class="btn btn-default navbar-btn navbar-right" title="download all data of ayah after processing in sawaref as JSON file. Not imp anymore.">Download Data</a>
+                    <a id="saveJSON" ng-click="uploadAllResult(sorahNav.sorah,sorahNav.ayah)" type="button" class="btn btn-default navbar-btn navbar-right" title="upload all data of ayah after processing in sawaref and save it in morpho/sawaref. Not imp anymore.">Upload Data</a>
+                    <a id="saveCSV" ng-click="saveCSV(sorahNav.sorah,sorahNav.ayah,sorahNav.task)" type="button" class="btn btn-default navbar-btn navbar-right" title="Download current viewing table as CSV">CSV</a>
+                    <a ng-click="backupData()" type="button" class="btn btn-default navbar-btn navbar-right" title="save to morph/backup checked and chosed solutions and alignment made">Backup Annotation</a>
+                    <a ng-click="doExperiment()" type="button" class="btn btn-default navbar-btn navbar-right">Exper</a>
+                </div>
+            </div>
+        </nav>
+        <div class="container inputText">
+            <div ng-show="errorMsg" class="alert alert-danger" role="alert">{{errorMsg}}</div>
+            <div id="status" style="display:none" class="alert alert-info" role="alert"></div>
+            <form id="analyze">
+                <div class="input-group">
+                    <input id="inputtext" class="form-control" placeholder="Put the text here" type="text" name="text"/>
+                    <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit">Submit!</button>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div ng-view></div>
+        <script src="assets/js/tables.js"></script>
+        <script src="assets/js/myjs.js"></script>
+        <script src="//localhost:32111/livereload.js"></script>
+    </body>
+</html>
